@@ -23,6 +23,7 @@ class CopyPhotoToYandex:
         self.dir = dir
         self.count_photos = count_photos
 
+
     # Получение фото с профиля
     def get_photos(self):
         get_photos_url = self.url + 'photos.get'
@@ -119,15 +120,21 @@ if __name__ == '__main__':
     mark = '-'
     # Hello Words
     print(f'ПРИВЕТСТВУЮ, ЭТО РЕЗЕРВНЫЙ КОПИРОВАЛЬЩИК.\n{mark * 30}')
-    vk = ''
+    vk =
     yandex_ = ''
     floader = 'Test'
-    # id_vk = int(input('Введите пожалуйста ID аккаунта VK: '))
-    # yandex = input('Теперь вам нужно будет ввести токен YANDEX\nЭто нужно для того чтобы мы знали куда вам отправить файл\nВвод: ')
-    # dir = input('И название папки: ')
-    Me = CopyPhotoToYandex(id=vk, yandex_token=yandex_, count_photos=3, dir=floader)
+    id_vk = int(input('Введите пожалуйста ID аккаунта VK: '))
+    yandex = input('\nТеперь вам нужно будет ввести токен YANDEX\nЭто нужно для того чтобы мы знали куда вам отправить файл\nВвод: ')
+    count_photos = input('\nКакое количество фото хотите загрузить?\nМожете нажать ENTER и будет выставленно значение - 5: ')
+    if count_photos == '':
+        count_photos = 5
+    dir = input('И название папки: ')
+    Me = CopyPhotoToYandex(id=id_vk, yandex_token=yandex, count_photos=count_photos, dir=dir)
     print('Загрузка фото...')
-    Me.upload_photos()
+    pprint(Me.upload_photos())
+    print('Ваши фото:\n')
+    pprint(Me.name_photo(), width=1, indent=2)
+
     print(f'{mark * 30}\nПрограмма сработала успешно, проверьте диск.')
     input('Введите ENTER для выхода: ')
 
