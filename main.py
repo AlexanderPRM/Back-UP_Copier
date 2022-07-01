@@ -10,7 +10,7 @@ class CopyPhotoToYandex:
         vk_token = file.read().strip()
 
     # Инициализация
-    def __init__(self, id, yandex_token, count_photos, dir):
+    def __init__(self, id, yandex_token, count_photos, dir, album):
         self.params = {'access_token': self.vk_token,
                        'owner_id': id,
                        'v': 5.131,
@@ -22,12 +22,13 @@ class CopyPhotoToYandex:
         }
         self.dir = dir
         self.count_photos = count_photos
+        self.album = album
 
 
     # Получение фото с профиля
     def get_photos(self):
         get_photos_url = self.url + 'photos.get'
-        get_photos_params = {'album_id': ['profile'],
+        get_photos_params = {'album_id': self.album,
                             'extended': 1,
                              'count': self.count_photos}
         response = requests.get(get_photos_url, params={**self.params, **get_photos_params}).json()
@@ -97,6 +98,7 @@ class CopyPhotoToYandex:
 
     # Загрузка фото
     def upload_photos(self):
+        mark = '-'
         upload_url = 'https://cloud-api.yandex.net/v1/disk/resources/upload'
         count = -1
         dir_name = self.create_dir(self.dir)
@@ -111,30 +113,64 @@ class CopyPhotoToYandex:
            for i in range(len(self.url_photos())):
               sleep(0.5)
               bar()
+        print(mark * 30)
 
-
+def more_option():
+    mark = '-'
+    params = []
+    question = input('Хотите указать дополнительные параметры? ДА\НЕТ: ')
+    print(mark * 30)
+    while question.strip() != 'ДА' or question.strip() != 'НЕТ':
+        if question.upper().strip() == 'ДА':
+            count_photos = input('''\nКакое количество фото хотите загрузить?
+            Можете нажать ENTER и будет выставленно значение - 5: ''')
+            if count_photos == '':
+                count_photos = 5
+            params.append(count_photos)
+            dir = input('Как назвать папку на вашем диске?: ')
+            params.append(dir)
+            album = input('Что будем загружать, аватарки или фото со стены? АВЫ\СТЕНА: ')
+            if album.lower().strip() == 'авы':
+                params.append('profile')
+            elif album.lower().strip() == 'стена':
+                params.append('wall')
+            return params
+        elif question.upper().strip() == 'НЕТ':
+            count_photos = 5
+            params.append(count_photos)
+            dir = 'BackUp-Program'
+            params.append(dir)
+            album = 'profile'
+            params.append(album)
+            print(f'''Выставлены значения по умолчания.
+            Количество фото - {count_photos}
+            Наименование папки - {dir}
+            Альбом загрузки - {album}''')
+            return params
+        else:
+            print('Разработчик не реализовал другие варианты, так что следуйте инструкции :)')
+            question = input('Хотите указать дополнительные параметры? ДА\НЕТ: ')
 
 
 
 if __name__ == '__main__':
     mark = '-'
     # Hello Words
-    print(f'ПРИВЕТСТВУЮ, ЭТО РЕЗЕРВНЫЙ КОПИРОВАЛЬЩИК.\n{mark * 30}')
-    vk =
-    yandex_ = ''
-    floader = 'Test'
+    print(f'\nПРИВЕТСТВУЮ, ЭТО РЕЗЕРВНЫЙ КОПИРОВАЛЬЩИК.\n{mark * 30}')
+    # vk =
+    # yandex_ =
     id_vk = int(input('Введите пожалуйста ID аккаунта VK: '))
-    yandex = input('\nТеперь вам нужно будет ввести токен YANDEX\nЭто нужно для того чтобы мы знали куда вам отправить файл\nВвод: ')
-    count_photos = input('\nКакое количество фото хотите загрузить?\nМожете нажать ENTER и будет выставленно значение - 5: ')
-    if count_photos == '':
-        count_photos = 5
-    dir = input('И название папки: ')
-    Me = CopyPhotoToYandex(id=id_vk, yandex_token=yandex, count_photos=count_photos, dir=dir)
-    print('Загрузка фото...')
-    pprint(Me.upload_photos())
+    yandex = input('''\nТеперь вам нужно будет ввести токен своего YANDEX-DISK,
+Это нужно для того чтобы мы знали куда вам отправить файл. Узнать свой токен можно тут - https://yandex.ru/dev/disk/poligon/
+Ввод: ''')
+    #user_params = [7, 'тесты', 'profile']
+    user_params = more_option()
+    Me = CopyPhotoToYandex(id=id_vk, yandex_token=yandex,
+                           count_photos=user_params[0], dir=user_params[1], album=user_params[2])
+    print(f'{mark * 30}\nЗагрузка фото...\n{mark * 30}')
+    Me.upload_photos()
     print('Ваши фото:\n')
     pprint(Me.name_photo(), width=1, indent=2)
-
     print(f'{mark * 30}\nПрограмма сработала успешно, проверьте диск.')
     input('Введите ENTER для выхода: ')
 
