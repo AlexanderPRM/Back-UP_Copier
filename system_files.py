@@ -1,5 +1,7 @@
 import sys
 from time import sleep
+from NetworkClasses import *
+from DiskClasses import *
 
 
 def write(text):
@@ -35,7 +37,7 @@ def more_option():
             params.append(dir)
             album = 'profile'
             params.append(album)
-            print(f'''Выставлены значения по умолчания.
+            print(f'''Выставлены значения по умолчанию.
             Количество фото - {count_photos}
             Наименование папки - {dir}
             Альбом загрузки - {album}''')
