@@ -140,4 +140,3 @@ def check_tokens():
 
     return tokens
 
-print(check_tokens())
