@@ -62,26 +62,26 @@ def check_tokens():
     tokens = []
     mark = '-'
 
-    # Проверка ID ВК в файле Tokens/VK_Token.txt
-    if os.stat("Tokens/VK_Token.txt").st_size == 0:
+    # Проверка ID ВК в файле Tokens/VK_ID.txt
+    if os.stat("Tokens/VK_ID.txt").st_size == 0:
         id_vk = input('Введите пожалуйста ID аккаунта VK: ').strip()
         while not id_vk.isdigit():
             print('ID VK должен быть числом, пожалуйста введите еще раз.')
             print(mark * 30)
             id_vk = input('Введите пожалуйста ID аккаунта VK: ')
         else:
-            with open('Tokens/VK_Token.txt', 'w') as vk:
+            with open('Tokens/VK_ID.txt', 'w') as vk:
                 vk.write(id_vk)
             tokens.append(id_vk)
             print(mark * 30)
     else:
-        with open('Tokens/VK_Token.txt', 'r') as token:
+        with open('Tokens/VK_ID.txt', 'r') as token:
             reader = token.read()
-            print(f'Ваш ID профиля VK сохраненный в файле "Tokens/VK_Token.txt"\n:{reader}:\n')
+            print(f'Ваш ID профиля VK сохраненный в файле "Tokens/VK_ID.txt"\n:{reader}:\n')
         question = input('Оставляем введённый ID VK? ДА/НЕТ: ').lower().strip()
         while question != 'да' or question != 'нет':
             if question == 'да':
-                with open('Tokens/VK_Token.txt', 'r') as token:
+                with open('Tokens/VK_ID.txt', 'r') as token:
                     reader = token.read()
                     tokens.append(reader)
                 print(mark * 30)
@@ -93,7 +93,7 @@ def check_tokens():
                     print(mark * 30)
                     id_vk = input('Введите пожалуйста ID аккаунта VK: ')
                 else:
-                    with open('Tokens/VK_Token.txt', 'w') as vk:
+                    with open('Tokens/VK_ID.txt', 'w') as vk:
                         vk.write(id_vk)
                         tokens.append(id_vk)
                 break
@@ -140,3 +140,4 @@ def check_tokens():
 
     return tokens
 
+print(check_tokens())
