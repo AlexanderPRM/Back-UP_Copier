@@ -13,17 +13,22 @@ class VK:
         self.count_photos = count_photos
         self.album = album
 
-    # Получение фото с профиля
+
     def get_photos(self):
+        '''Получааем фото с альбома профиля VK введенного пользователем'''
         get_photos_url = self.url + 'photos.get'
         get_photos_params = {'album_id': self.album,
                              'extended': 1,
                              'count': self.count_photos}
-        response = requests.get(get_photos_url, params={**self.params, **get_photos_params}).json()
-        return response
+        response = requests.get(get_photos_url, params={**self.params, **get_photos_params})
+        if response.status_code // 100 in [2, 3]:
+            return response.json()
+        else:
+            print('Произошла ошибка.')
 
     # Отсеивание ссылок и размера
     def url_photos(self):
+        '''Отсеиваем нужные ссылки и размер максимального размера каждого фото'''
         photos = self.get_photos()['response']['items']
         info_all_photos = []
         for post in photos:
@@ -55,6 +60,7 @@ class VK:
 
     # Наименование фото и размер фото
     def name_photo(self):
+        '''Создаём инфо с именем и размером каждого фото'''
         photos = self.get_photos()['response']['items']
         list_photos = []
         count = -1
