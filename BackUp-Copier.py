@@ -26,6 +26,6 @@ if __name__ == '__main__':
     pprint(name_photos, width=1, indent=2)
     with open('info_files.json', 'w') as writer:
         json.dump(name_photos, writer)
-        print('\nВаши фото записаны в файл - info_files.json')
+        print('\nИнформация по вашим фото записана в файл - info_files.json')
     write(f'{mark * 30}\nПрограмма сработала успешно, проверьте диск.\n')
     input('Введите ENTER для выхода: ')
