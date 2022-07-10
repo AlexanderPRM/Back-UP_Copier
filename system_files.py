@@ -3,6 +3,7 @@ from time import sleep
 import os
 
 
+
 def write(text):
     """Функция создаёт эффект печатания букв"""
     for char in text:
@@ -20,18 +21,24 @@ def more_option():
     print(mark * 30)
     while question.strip() != 'ДА' or question.strip() != 'НЕТ':
         if question == 'ДА':
-            count_photos = input('''\nКакое количество фото хотите загрузить?
-            Можете нажать ENTER и будет выставленно значение - 5: ''')
+            count_photos = input('''Какое количество фото хотите загрузить?
+        Можете нажать ENTER и будет выставленно значение - 5: ''')
             if count_photos == '':
                 count_photos = 5
             params.append(count_photos)
-            dir = input('Как назвать папку на вашем диске?: ')
+            dir = input('\nКак назвать папку на вашем диске?: ')
             params.append(dir)
-            album = input('Что будем загружать, аватарки или фото со стены? АВЫ\СТЕНА: ').lower().strip()
-            if album == 'авы':
-                params.append('profile')
-            elif album == 'стена':
-                params.append('wall')
+            album = input('\nЧто будем загружать, аватарки или фото со стены? АВЫ\СТЕНА: ').lower().strip()
+            # Проверка правильного ввода альбома
+            while album not in ['авы', 'стена']:
+                print(mark * 30)
+                write('Пожалуйста, введите АВЫ или СТЕНА.\nЕсть еще альбом с сохраненными фото, он будет добавлен в будущем\n')
+                album = input('\nЧто будем загружать, аватарки или фото со стены? АВЫ\СТЕНА: ').lower().strip()
+            else:
+                if album == 'авы':
+                    params.append('profile')
+                elif album == 'стена':
+                    params.append('wall')
             return params
         elif question == 'НЕТ':
             count_photos = 5
@@ -140,4 +147,3 @@ def check_tokens():
 
     return tokens
 
-print(check_tokens())
